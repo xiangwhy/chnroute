@@ -1,5 +1,4 @@
 /log info "Loading CN ipv4 address list"
-/ip firewall address-list remove [/ip firewall address-list find list=CN]
 /ip firewall address-list
 :local ipList {
     "1.0.1.0/24";
@@ -7929,5 +7928,5 @@
     "223.255.252.0/23";
 }
 :foreach ip in=$ipList do={
-    /ip firewall address-list add address=$ip list=CN timeout=0
+    /ip firewall address-list add address=$ip list=List_ALL_China timeout=0
 }
