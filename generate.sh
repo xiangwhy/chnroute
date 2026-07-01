@@ -188,7 +188,7 @@ EOL
     cat <<EOL >>"$tmp_rsc"
 }
 :foreach ip in=\$ipList do={
-    /ip firewall address-list add address=\$ip list=CN timeout=${timeout}
+    /ip firewall address-list add address=\$ip list=List_ALL_China timeout=${timeout}
 }
 EOL
 
