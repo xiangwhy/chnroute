@@ -178,7 +178,7 @@ generate_cn_ip_list() {
     processed_ips="${TMP_DIR}/processing/$(basename "$output_file").ips"
 
     local generate_time
-    generate_time=$(date '+%Y-%m-%d %H:%M:%S')
+    generate_time=$(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S')
 
     cat <<EOL >"$tmp_rsc"
 # Generated at: ${generate_time}

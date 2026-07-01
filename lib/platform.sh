@@ -54,7 +54,7 @@ setup_platform_specific() {
             ;;
     esac
 
-    DATE_FORMAT=$(date -Iseconds 2>/dev/null || date '+%Y-%m-%dT%H:%M:%S%z')
+    DATE_FORMAT=$(TZ=Asia/Shanghai date -Iseconds 2>/dev/null || TZ=Asia/Shanghai date '+%Y-%m-%dT%H:%M:%S%z')
     log_info "Platform detected: ${platform}"
 }
 
