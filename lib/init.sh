@@ -8,7 +8,15 @@
 # Usage: source "${LIB_DIR}/init.sh" || exit 1
 # Requires: SCRIPT_DIR and LIB_DIR to be set before sourcing
 
+# Guard to prevent double-initialization
+_CHNROUTE_INITIALIZED=${_CHNROUTE_INITIALIZED:-0}
+
 init_chnroute() {
+    # Skip if already initialized
+    if [[ "$_CHNROUTE_INITIALIZED" -eq 1 ]]; then
+        return 0
+    fi
+
     # Validate required variables
     if [[ -z "${SCRIPT_DIR:-}" ]]; then
         echo "ERROR: SCRIPT_DIR is not set" >&2
@@ -44,6 +52,7 @@ init_chnroute() {
         . "$module_path"
     done
 
+    _CHNROUTE_INITIALIZED=1
     return 0
 }
 

@@ -256,17 +256,14 @@ process_gfwlist() {
     local HANDLE_WILDCARD_PATTERN='s#^(([a-zA-Z0-9]*\*[-a-zA-Z0-9]*)?(\.))?([a-zA-Z0-9][-a-zA-Z0-9]*(\.[a-zA-Z0-9][-a-zA-Z0-9]*)+)(\*[a-zA-Z0-9]*)?#\4#g'
 
     log_info "Extracting domains from GFWList"
-    set +e
-    grep -vE "$IGNORE_PATTERN" "$gfwlist_file" | \
-        $SED_ERES "$HEAD_FILTER_PATTERN" | \
-        $SED_ERES "$TAIL_FILTER_PATTERN" | \
-        grep -E "$DOMAIN_PATTERN" | \
-        $SED_ERES "$HANDLE_WILDCARD_PATTERN" >"$domain_temp_file"
-    local pipeline_status=$?
-    set -e
-    if [[ $pipeline_status -ne 0 ]]; then
-        log_warn "Domain extraction pipeline exited with status ${pipeline_status}"
-    fi
+    # Note: Pipeline may partially fail (grep returns 1 on no match)
+    # This is expected behavior, not an error
+    {
+        grep -vE "$IGNORE_PATTERN" "$gfwlist_file" || true
+    } | $SED_ERES "$HEAD_FILTER_PATTERN" \
+      | $SED_ERES "$TAIL_FILTER_PATTERN" \
+      | { grep -E "$DOMAIN_PATTERN" || true; } \
+      | $SED_ERES "$HANDLE_WILDCARD_PATTERN" >"$domain_temp_file"
 
     if [[ -n "$EXCLUDE_DOMAIN_FILE" ]]; then
         log_info "Applying exclude list ${EXCLUDE_DOMAIN_FILE}"

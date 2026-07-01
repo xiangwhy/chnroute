@@ -17,7 +17,7 @@ check_system_resources() {
     available_disk=$(df . | awk 'NR==2{printf "%d", $4}')
 
     local cpu_cores
-    cpu_cores=$(nproc 2>/dev/null || echo "1")
+    cpu_cores=$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo "1")
 
     if (( available_memory < 512 )); then
         log_warn "Low available memory: ${available_memory}MB"
