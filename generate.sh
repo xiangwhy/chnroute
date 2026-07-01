@@ -168,7 +168,6 @@ generate_cn_ip_list() {
 
     cat <<EOL >"$tmp_rsc"
 /log info "Loading CN ipv4 address list"
-/ip firewall address-list remove [/ip firewall address-list find list=CN]
 /ip firewall address-list
 :local ipList {
 EOL
