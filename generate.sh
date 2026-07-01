@@ -166,7 +166,11 @@ generate_cn_ip_list() {
     tmp_rsc="${TMP_DIR}/processing/$(basename "$output_file")"
     processed_ips="${TMP_DIR}/processing/$(basename "$output_file").ips"
 
+    local generate_time
+    generate_time=$(date '+%Y-%m-%d %H:%M:%S')
+
     cat <<EOL >"$tmp_rsc"
+# Generated at: ${generate_time}
 /log info "Loading CN ipv4 address list"
 /ip firewall address-list
 :local ipList {
