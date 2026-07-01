@@ -1,5 +1,5 @@
 # RouterOS script for GFW domain list - Version v7
-# Source: https://github.com/ruijzhan/chnroute
+# Source: https://github.com/xiangwhy/chnroute
 
 :global dnsserver
 /ip dns static remove [/ip dns static find forward-to=$dnsserver ]
