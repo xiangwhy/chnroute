@@ -27,9 +27,8 @@ jobs:
         path: |
           ~/.cache
           ~/.local
-        key: ${{ runner.os }}-cache-${{ hashFiles('**/makefile') }}-${{ github.run_id }}
+        key: ${{ runner.os }}-cache-${{ hashFiles('lib/*.sh', 'generate.sh', 'gfwlist2dnsmasq.sh', 'Makefile') }}
         restore-keys: |
-          ${{ runner.os }}-cache-${{ hashFiles('**/makefile') }}-
           ${{ runner.os }}-cache-
 
     - name: Set up environment

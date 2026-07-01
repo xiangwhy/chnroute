@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
 # Script to generate RouterOS configuration files for China IP routes and GFW domain lists
-# Author: ruijzhan
-# Repository: https://github.com/ruijzhan/chnroute
+# Original Author: ruijzhan
+# Fork Maintainer: xiangwhy
+# Repository: https://github.com/xiangwhy/chnroute
+# Upstream: https://github.com/ruijzhan/chnroute
 
 set -euo pipefail
 
@@ -11,26 +13,12 @@ export LC_ALL=POSIX
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LIB_DIR="${SCRIPT_DIR}/lib"
 
-# shellcheck source=lib/config.sh
-. "${LIB_DIR}/config.sh"
-# shellcheck source=lib/logger.sh
-. "${LIB_DIR}/logger.sh"
-# shellcheck source=lib/temp.sh
-. "${LIB_DIR}/temp.sh"
-# shellcheck source=lib/error.sh
-. "${LIB_DIR}/error.sh"
-# shellcheck source=lib/platform.sh
-. "${LIB_DIR}/platform.sh"
-# shellcheck source=lib/dependencies.sh
-. "${LIB_DIR}/dependencies.sh"
-# shellcheck source=lib/resources.sh
-. "${LIB_DIR}/resources.sh"
-# shellcheck source=lib/validation.sh
-. "${LIB_DIR}/validation.sh"
-# shellcheck source=lib/downloader.sh
-. "${LIB_DIR}/downloader.sh"
-# shellcheck source=lib/processor.sh
-. "${LIB_DIR}/processor.sh"
+# shellcheck source=lib/init.sh
+. "${LIB_DIR}/init.sh"
+if ! init_chnroute; then
+    echo "ERROR: Failed to initialize chnroute libraries" >&2
+    exit 1
+fi
 
 TMP_DIR=""
 PARALLEL_THREADS=""
@@ -104,6 +92,16 @@ run_gfwlist2dnsmasq() {
 create_gfwlist_rsc() {
     local version=$1
     local output_rsc=$2
+
+    if [[ -z "$version" ]]; then
+        log_error "Version parameter is required"
+        return 1
+    fi
+    if [[ -z "$output_rsc" ]]; then
+        log_error "Output file parameter is required"
+        return 1
+    fi
+
     local input_file="${SCRIPT_DIR}/${GFWLIST_TXT}"
 
     if ! validate_file_exists "$input_file" "Generated domain list"; then
@@ -148,12 +146,25 @@ EOL
 }
 
 generate_cn_ip_list() {
+    if [[ $# -ne 3 ]]; then
+        log_error "Usage: generate_cn_ip_list <input> <output> <timeout>"
+        return 1
+    fi
+
     local input_file=$1
     local output_file=$2
     local timeout=$3
 
-    if [[ $# -ne 3 ]]; then
-        log_error "Usage: generate_cn_ip_list <input> <output> <timeout>"
+    if [[ -z "$input_file" ]]; then
+        log_error "Input file parameter is required"
+        return 1
+    fi
+    if [[ -z "$output_file" ]]; then
+        log_error "Output file parameter is required"
+        return 1
+    fi
+    if [[ -z "$timeout" ]]; then
+        log_error "Timeout parameter is required"
         return 1
     fi
 
@@ -324,12 +335,8 @@ parallel_downloads() {
 }
 
 main() {
-    initialize_logging
-    create_temp_root
-    trap 'cleanup_artifacts; cleanup_temp_root' EXIT
-    setup_error_trap
-    setup_platform_specific
-    check_dependencies_detailed
+    init_full_environment
+    trap 'cleanup_artifacts; cleanup_temp_root' EXIT INT TERM
 
     check_system_resources
     local optimal_threads="${SYSTEM_OPTIMAL_THREADS:-$DEFAULT_THREAD_COUNT}"

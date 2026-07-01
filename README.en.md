@@ -1,6 +1,8 @@
 # chnroute
 
-[![built with Codeium](https://codeium.com/badges/main)](https://codeium.com) [![Daily Make and Commit](https://github.com/ruijzhan/chnroute/actions/workflows/main.yaml/badge.svg)](https://github.com/ruijzhan/chnroute/actions/workflows/main.yaml)
+[![Daily Make and Commit](https://github.com/xiangwhy/chnroute/actions/workflows/main.yaml/badge.svg)](https://github.com/xiangwhy/chnroute/actions/workflows/main.yaml)
+
+> **Fork Notice**: This repository is forked from [ruijzhan/chnroute](https://github.com/ruijzhan/chnroute)
 
 ## Project Overview
 
@@ -56,13 +58,15 @@ This will execute the `generate.sh` script, download the latest IP lists and dom
 #### 2.1.1 Dependencies
 
 The script requires the following dependencies:
-- bash
+- bash (3.2+, recommended 4.0+)
 - curl or wget
 - awk
 - sort
 - base64
+- grep
+- sed
 
-Most Linux distributions have these tools installed by default.
+Most Linux distributions and macOS have these tools installed by default.
 
 ### 2.2 Importing and Applying China IP Ranges
 
@@ -73,11 +77,11 @@ Use the following script to import CN and LAN IP ranges into RouterOS:
 ```ros
 /system script
 add dont-require-permissions=no name=cn owner=admin policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source="
-/tool fetch url=https://raw.githubusercontent.com/ruijzhan/chnroute/master/CN.rsc
+/tool fetch url=https://raw.githubusercontent.com/xiangwhy/chnroute/master/CN.rsc
 import file-name=CN.rsc
 file remove CN.rsc
 
-/tool fetch url=https://raw.githubusercontent.com/ruijzhan/chnroute/master/LAN.rsc
+/tool fetch url=https://raw.githubusercontent.com/xiangwhy/chnroute/master/LAN.rsc
 import file-name=LAN.rsc
 file remove LAN.rsc"
 ```
@@ -123,7 +127,7 @@ Use the following script to import gfwlist rules:
 ```ros
 /system script
 add dont-require-permissions=no name=gfwlist owner=admin policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source="
-/tool fetch url=https://raw.githubusercontent.com/ruijzhan/chnroute/master/gfwlist.rsc
+/tool fetch url=https://raw.githubusercontent.com/xiangwhy/chnroute/master/gfwlist.rsc
 /import file-name=gfwlist.rsc
 /file remove gfwlist.rsc
 :log warning \"gfwlist domains imported successfully\""
@@ -178,24 +182,59 @@ This configuration will automatically update the rules every day at 4:30 AM.
 ```
 .
 ├── .github/workflows/  # GitHub Actions workflow configuration
+├── lib/               # Shell library modules
+│   ├── init.sh        # Common initialization module
+│   ├── config.sh      # Configuration constants
+│   ├── logger.sh      # Logging utilities
+│   ├── temp.sh        # Temporary file management
+│   ├── error.sh       # Error handling
+│   ├── platform.sh    # Platform detection
+│   ├── dependencies.sh # Dependency checking
+│   ├── resources.sh   # System resource checking
+│   ├── validation.sh  # Input validation
+│   ├── downloader.sh  # Download utilities
+│   └── processor.sh   # Data processing
+├── tests/             # Test suite
+├── generate.sh        # Main generation script
+├── gfwlist2dnsmasq.sh # gfwlist conversion script
+├── Makefile           # Build script
 ├── CN.rsc             # Mainland China IPv4 address ranges RouterOS script
 ├── CN_mem.rsc         # Memory-optimized version of China IP address list
 ├── LAN.rsc            # Internal network IPv4 address ranges RouterOS script
-├── Makefile           # Build script
-├── README.md          # Chinese documentation
-├── README.en.md       # English documentation
-├── exclude_list.txt   # Excluded domains list
-├── generate.sh        # Main generation script
-├── generate_cn.sh     # China IP list generation script
-├── gfwlist.txt        # Processed domain list
-├── gfwlist2dnsmasq.sh # gfwlist conversion script
 ├── gfwlist_v7.rsc     # RouterOS v7+ version of gfwlist script
-└── include_list.txt   # Included domains list
+├── 03-gfwlist.conf    # dnsmasq format rules
+├── gfwlist.txt        # Processed domain list
+├── include_list.txt   # Included domains list
+└── exclude_list.txt   # Excluded domains list
 ```
 
-## 5. Troubleshooting
+## 5. Architecture Highlights
 
-### 5.1 Common Issues
+### 5.1 Modular Design
+
+The project uses a modular lib/ architecture, separating functionality into independent library modules:
+
+- **init.sh**: Unified initialization entry point, reducing code duplication
+- **processor.sh**: Supports parallel processing with automatic optimal thread detection
+- **downloader.sh**: Download utilities with retry logic and exponential backoff
+- **error.sh**: Unified error handling with file and line number information
+
+### 5.2 Cross-Platform Compatibility
+
+- Supports macOS, Linux, and BSD systems
+- Automatic platform detection and command adaptation (e.g., base64, sed parameters)
+- Compatible with bash 3.2+ (macOS default version)
+
+### 5.3 Robustness Guarantees
+
+- Complete signal handling (EXIT, INT, TERM)
+- Parameter validation and input sanitization
+- Parallel task status checking
+- Safe temporary file management
+
+## 6. Troubleshooting
+
+### 6.1 Common Issues
 
 **Q: DNS resolution becomes slow after importing rules?**
 
@@ -212,22 +251,22 @@ A: Run the following command in RouterOS to see the loaded rules:
 /ip dns static print count-only
 ```
 
-## 6. Advanced Usage
+## 7. Advanced Usage
 
-### 6.1 Custom Scripts
+### 7.1 Custom Scripts
 
 You can modify the `generate.sh` script to customize the generation process, such as adding more IP list sources or adjusting domain processing logic.
 
-### 6.2 Integration with Other Systems
+### 7.2 Integration with Other Systems
 
 Besides RouterOS, the rules generated by this project can also be used with other systems:
 
 - **OpenWrt**: Use `03-gfwlist.conf` with dnsmasq
 - **Other routing systems**: You can reference the script logic to convert rules to formats suitable for your system
 
-## 7. Contributions and Feedback
+## 8. Contributions and Feedback
 
-Contributions and feedback are welcome through [Issues](https://github.com/ruijzhan/chnroute/issues) or [Pull Requests](https://github.com/ruijzhan/chnroute/pulls).
+Contributions and feedback are welcome through [Issues](https://github.com/xiangwhy/chnroute/issues) or [Pull Requests](https://github.com/xiangwhy/chnroute/pulls).
 
 ---
 

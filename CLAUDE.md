@@ -35,10 +35,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Dependencies
 The scripts require these standard Unix tools:
-- **Core**: bash, curl or wget, awk, sort, base64, grep, sed, tar
+- **Core**: bash (3.2+, recommended 4.0+), curl or wget, awk, sort, base64, grep, sed, tar
 - **Optional**: shellcheck (for static analysis), python3 (for benchmark averages), /usr/bin/time (for detailed timing)
 
-Most Linux distributions include these by default.
+Most Linux distributions and macOS include these by default.
 
 ## Architecture
 
@@ -58,16 +58,17 @@ Most Linux distributions include these by default.
 - Handles exclude/include domain files for customization
 
 **Library Modules (`lib/`)**:
+- `init.sh` - Common initialization module, unified entry point for all scripts
 - `config.sh` - Central configuration, constants, and metadata
 - `logger.sh` - Logging utilities with color output and levels
 - `downloader.sh` - Network downloads with retry logic and error handling
 - `processor.sh` - Parallel data processing and domain formatting
 - `validation.sh` - Input validation and file existence checking
-- `error.sh` - Error handling utilities and cleanup functions
+- `error.sh` - Error handling utilities with file/line information
 - `temp.sh` - Temporary file management and cleanup
 - `platform.sh` - Platform detection and compatibility
 - `dependencies.sh` - Dependency checking and validation
-- `resources.sh` - External resource URLs and data sources
+- `resources.sh` - System resource checking and optimization
 
 ### Data Flow
 
@@ -120,12 +121,31 @@ Both files use plain text format, one domain per line.
 - Graceful degradation when optional components fail
 - Detailed logging with timestamps and color coding
 - Automatic cleanup of temporary files
+- Error messages include file name and line number for debugging
+
+### Cross-Platform Compatibility
+- Supports macOS, Linux, and BSD systems
+- Automatic platform detection and command adaptation
+- Compatible with bash 3.2+ (macOS default version)
+- Tests designed for bash 3.x compatibility
 
 ### RouterOS Compatibility
 - Support for both legacy and v7+ RouterOS versions
 - Variable DNS server configuration via `$dnsserver` global variable
 - Address list management with configurable timeouts
 - DNS cache flushing and logging integration
+
+## Testing
+
+### Test Suite
+- Run `bash tests/run_tests.sh` for automated tests
+- Tests are compatible with bash 3.2+ (macOS default)
+- Test files are located in `tests/` directory
+
+### Validation
+- `make test` - Run generation and validate output files
+- `make validate` - Validate generated output files exist and are non-empty
+- `make check` - Verify dependencies and shell script syntax
 
 ## Automation
 
@@ -140,7 +160,7 @@ The project uses GitHub Actions for automatic updates:
 ### RouterOS Import Scripts
 The project generates ready-to-use RouterOS scripts that can be imported via:
 ```ros
-/tool fetch url=https://raw.githubusercontent.com/ruijzhan/chnroute/master/CN.rsc
+/tool fetch url=https://raw.githubusercontent.com/xiangwhy/chnroute/master/CN.rsc
 /import file-name=CN.rsc
 ```
 

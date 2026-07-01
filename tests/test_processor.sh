@@ -11,21 +11,15 @@ if [[ -z "${TESTS_PASSED+x}" ]]; then
     . "${SCRIPT_DIR}/test_framework.sh"
 fi
 
-# shellcheck source=lib/config.sh
-. "${LIB_DIR}/config.sh"
-# shellcheck source=lib/logger.sh
-. "${LIB_DIR}/logger.sh"
+# shellcheck source=lib/init.sh
+. "${LIB_DIR}/init.sh"
+if ! init_chnroute; then
+    echo "ERROR: Failed to initialize chnroute libraries" >&2
+    exit 1
+fi
 
 # Reduce noise during tests
 LOG_LEVEL=$LOG_LEVEL_ERROR
-# shellcheck source=lib/temp.sh
-. "${LIB_DIR}/temp.sh"
-# shellcheck source=lib/error.sh
-. "${LIB_DIR}/error.sh"
-# shellcheck source=lib/validation.sh
-. "${LIB_DIR}/validation.sh"
-# shellcheck source=lib/processor.sh
-. "${LIB_DIR}/processor.sh"
 
 create_temp_root
 
@@ -41,7 +35,11 @@ EOF
     process_domains_parallel "$input_file" "$output_file" 2
     assert_file_exists "$output_file" "domain output generated"
 
-    mapfile -t lines <"$output_file"
+    # Read lines into array (compatible with bash 3.x)
+    local lines=()
+    while IFS= read -r line; do
+        lines+=("$line")
+    done <"$output_file"
     assert_equals "3" "${#lines[@]}" "domain line count"
     assert_equals '    "example.com";' "${lines[0]}" "domain line 1 matches"
     assert_equals '    "foo.bar";' "${lines[1]}" "domain line 2 matches"
@@ -62,7 +60,11 @@ EOF
 
     assert_equals "2" "$ip_count" "ip count extracted"
 
-    mapfile -t ip_lines <"$output_file"
+    # Read lines into array (compatible with bash 3.x)
+    local ip_lines=()
+    while IFS= read -r line; do
+        ip_lines+=("$line")
+    done <"$output_file"
     assert_equals "2" "${#ip_lines[@]}" "ip line count"
     assert_equals '    "1.1.1.0/24";' "${ip_lines[0]}" "ip line 1 matches"
     assert_equals '    "2.2.2.0/24";' "${ip_lines[1]}" "ip line 2 matches"

@@ -1,2 +1,37 @@
-.vscode
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+\#*\#
+.*.un~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Build and distribution
+dist/
+build/
+*.tar.gz
+*.zip
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.processed
+.make.d/
+
+# Runtime artifacts
 gfwlist_autoproxy.txt
+chnroute_*
+
+# Test artifacts
+test_output/
+coverage/

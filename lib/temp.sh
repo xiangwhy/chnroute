@@ -5,6 +5,8 @@
 
 create_temp_root() {
     local prefix=${TEMP_FILE_PREFIX:-chnroute_}
+    TMP_DIR=""
+
     if [[ -d /dev/shm && -w /dev/shm ]]; then
         if ! TMP_DIR=$(mktemp -d -p /dev/shm "${prefix}XXXXXX" 2>/dev/null); then
             TMP_DIR=""

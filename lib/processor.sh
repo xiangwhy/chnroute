@@ -43,13 +43,28 @@ process_domains_parallel() {
     fi
 
     local part
+    local pids=()
     for part in "${parts[@]}"; do
         {
             awk '{printf "    \"%s\";\n", $0}' "$part" >"${part}.processed"
         } &
+        pids+=($!)
     done
 
-    wait
+    # Wait for all background jobs and check their exit status
+    local failed=0
+    for pid in "${pids[@]}"; do
+        if ! wait "$pid"; then
+            log_error "Parallel domain processing failed for PID $pid"
+            ((failed++))
+        fi
+    done
+
+    if (( failed > 0 )); then
+        log_error "${failed} parallel processing job(s) failed"
+        rm -f "${parts[@]}" "${split_prefix}"*.processed
+        return 1
+    fi
 
     local processed_parts=("${split_prefix}"*.processed)
     cat "${processed_parts[@]}" >"$output_file"

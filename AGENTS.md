@@ -6,16 +6,17 @@
   - `gfwlist2dnsmasq.sh`: converts gfwlist to dnsmasq rules or a plain domain list.
   - `generate_cn.sh`: optional/legacy helper.
 - **Library Modules (`lib/`)**:
+  - `init.sh`: Common initialization module, unified entry point for all scripts
   - `config.sh`: Central configuration, constants, and metadata
   - `logger.sh`: Logging utilities with color output and levels
   - `downloader.sh`: Network downloads with retry logic and error handling
   - `processor.sh`: Parallel data processing and domain formatting
   - `validation.sh`: Input validation and file existence checking
-  - `error.sh`: Error handling utilities and cleanup functions
+  - `error.sh`: Error handling utilities with file/line information
   - `temp.sh`: Temporary file management and cleanup
   - `platform.sh`: Platform detection and compatibility
   - `dependencies.sh`: Dependency checking and validation
-  - `resources.sh`: External resource URLs and data sources
+  - `resources.sh`: System resource checking and optimization
 - **Configuration Files**: `include_list.txt` (add domains), `exclude_list.txt` (remove domains).
 - **CI/CD**: `.github/workflows/main.yaml` runs `make` daily and commits updates.
 - **Documentation**: `README.md`, `README.en.md`, `CLAUDE.md` for usage and RouterOS examples.
@@ -74,9 +75,10 @@
 ## Testing Guidelines
 
 ### Validation Approach
-- **No Unit Test Framework**: Validation through functional testing and artifact verification.
+- **Test Suite**: Run `bash tests/run_tests.sh` or `make test` for automated tests.
 - **Primary Test**: Run `make` or `make test` and confirm all expected files exist and are non-empty.
 - **Output Verification**: Use `make validate` to check generated artifacts are properly formed.
+- **Bash Compatibility**: Tests are compatible with bash 3.2+ (macOS default).
 
 ### Domain Handling Testing
 - **Include/Exclude Lists**: Add sample entries to `include_list.txt`/`exclude_list.txt` and re-run generation.
@@ -132,7 +134,7 @@
 - **Standard Environment**: Maintain compatibility with Ubuntu-latest (CI environment).
 - **Minimal Dependencies**: Avoid adding runtime dependencies beyond standard Unix tools.
 - **Cross-Platform**: Ensure scripts work across different Linux distributions.
-- **Shell Compatibility**: Target bash 4.0+ features for maximum compatibility.
+- **Shell Compatibility**: Compatible with bash 3.2+ (macOS default), optimized for bash 4.0+.
 
 ### Network Configuration
 - **Proxy Support**: Configure proxies via standard environment variables (`http_proxy`, `https_proxy`).

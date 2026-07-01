@@ -79,7 +79,7 @@ These tools enhance functionality but are not strictly required:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/ruijzhan/chnroute.git
+git clone https://github.com/xiangwhy/chnroute.git
 cd chnroute
 ```
 
@@ -569,7 +569,7 @@ make memory-profile >> benchmark-report.txt
 
 1. **Setup Environment**
    ```bash
-   git clone https://github.com/ruijzhan/chnroute.git
+   git clone https://github.com/xiangwhy/chnroute.git
    cd chnroute
    make dev-setup
    source .make.d/setup.sh
@@ -764,7 +764,7 @@ iotop
    ```
 
 4. **GitHub Issues:**
-   - Report bugs at: https://github.com/ruijzhan/chnroute/issues
+   - Report bugs at: https://github.com/xiangwhy/chnroute/issues
    - Include system information and error logs
 
 ---
@@ -1059,7 +1059,7 @@ A: It's not recommended as it may cause conflicts. The temporary directory syste
 ### Getting Help
 
 - **Documentation**: This guide and the `make help` command
-- **Issues**: GitHub Issues at https://github.com/ruijzhan/chnroute/issues
+- **Issues**: GitHub Issues at https://github.com/xiangwhy/chnroute/issues
 - **Discussions**: GitHub Discussions for general questions
 - **Wiki**: Project wiki for additional documentation
 

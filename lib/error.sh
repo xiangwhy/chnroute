@@ -7,13 +7,19 @@ handle_error() {
     local exit_code=$1
     local function_name=${2:-unknown}
     local command=${3:-unknown}
+    local line_number=${4:-unknown}
+    local source_file=${5:-unknown}
 
-    log_error "Error in ${function_name}: ${command} (exit code: ${exit_code})"
+    # Extract just the filename from the full path
+    local filename
+    filename=$(basename "$source_file" 2>/dev/null || echo "$source_file")
+
+    log_error "Error in ${function_name} at ${filename}:${line_number}: ${command} (exit code: ${exit_code})"
 
     exit "$exit_code"
 }
 
 setup_error_trap() {
-    trap 'handle_error $? "${FUNCNAME[*]:-main}" "${BASH_COMMAND:-unknown}"' ERR
+    trap 'handle_error $? "${FUNCNAME[*]:-main}" "${BASH_COMMAND:-unknown}" "${LINENO}" "${BASH_SOURCE[0]:-unknown}"' ERR
 }
 

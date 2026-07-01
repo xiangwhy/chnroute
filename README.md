@@ -1,6 +1,8 @@
 # chnroute
 
-[![built with Codeium](https://codeium.com/badges/main)](https://codeium.com) [![Daily Make and Commit](https://github.com/ruijzhan/chnroute/actions/workflows/main.yaml/badge.svg)](https://github.com/ruijzhan/chnroute/actions/workflows/main.yaml)
+[![Daily Make and Commit](https://github.com/xiangwhy/chnroute/actions/workflows/main.yaml/badge.svg)](https://github.com/xiangwhy/chnroute/actions/workflows/main.yaml)
+
+> **Fork 说明**：本仓库 fork 自 [ruijzhan/chnroute](https://github.com/ruijzhan/chnroute)
 
 [English](./README.en.md)
 
@@ -60,13 +62,15 @@ make
 
 脚本需要以下依赖：
 
-- bash
+- bash (3.2+，推荐 4.0+)
 - curl 或 wget
 - awk
 - sort
 - base64
+- grep
+- sed
 
-大多数 Linux 发行版默认已安装这些工具。
+大多数 Linux 发行版和 macOS 默认已安装这些工具。
 
 ### 2.2 中国 IP 网段导入与应用
 
@@ -77,11 +81,11 @@ make
 ```ros
 /system script
 add dont-require-permissions=no name=cn owner=admin policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source="
-/tool fetch url=https://raw.githubusercontent.com/ruijzhan/chnroute/master/CN.rsc
+/tool fetch url=https://raw.githubusercontent.com/xiangwhy/chnroute/master/CN.rsc
 import file-name=CN.rsc
 file remove CN.rsc
 
-/tool fetch url=https://raw.githubusercontent.com/ruijzhan/chnroute/master/LAN.rsc
+/tool fetch url=https://raw.githubusercontent.com/xiangwhy/chnroute/master/LAN.rsc
 import file-name=LAN.rsc
 file remove LAN.rsc"
 ```
@@ -127,7 +131,7 @@ Columns: NAME, VALUE
 ```ros
 /system script
 add dont-require-permissions=no name=gfwlist owner=admin policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source="
-/tool fetch url=https://raw.githubusercontent.com/ruijzhan/chnroute/master/gfwlist.rsc
+/tool fetch url=https://raw.githubusercontent.com/xiangwhy/chnroute/master/gfwlist.rsc
 /import file-name=gfwlist.rsc
 /file remove gfwlist.rsc
 :log warning \"gfwlist 域名导入成功\""
@@ -182,24 +186,59 @@ add interval=1d name=update_chnroute on-event="/system script run cn\r\n/system 
 ```text
 .
 ├── .github/workflows/  # GitHub Actions 工作流配置
+├── lib/               # Shell 库模块
+│   ├── init.sh        # 公共初始化模块
+│   ├── config.sh      # 配置常量
+│   ├── logger.sh      # 日志工具
+│   ├── temp.sh        # 临时文件管理
+│   ├── error.sh       # 错误处理
+│   ├── platform.sh    # 平台检测
+│   ├── dependencies.sh # 依赖检查
+│   ├── resources.sh   # 系统资源检查
+│   ├── validation.sh  # 输入验证
+│   ├── downloader.sh  # 下载工具
+│   └── processor.sh   # 数据处理
+├── tests/             # 测试套件
+├── generate.sh        # 主生成脚本
+├── gfwlist2dnsmasq.sh # gfwlist 转换脚本
+├── Makefile           # 构建脚本
 ├── CN.rsc             # 中国大陆 IP 地址段 RouterOS 脚本
 ├── CN_mem.rsc         # 内存优化版中国 IP 地址列表
 ├── LAN.rsc            # 内网 IP 地址段 RouterOS 脚本
-├── Makefile           # 构建脚本
-├── README.md          # 中文文档
-├── README.en.md       # 英文文档
-├── exclude_list.txt   # 排除域名列表
-├── generate.sh        # 主生成脚本
-├── generate_cn.sh     # 中国 IP 列表生成脚本
-├── gfwlist.txt        # 处理后的域名列表
-├── gfwlist2dnsmasq.sh # gfwlist 转换脚本
 ├── gfwlist_v7.rsc     # RouterOS v7+ 版本的 gfwlist 脚本
-└── include_list.txt   # 包含域名列表
+├── 03-gfwlist.conf    # dnsmasq 格式规则
+├── gfwlist.txt        # 处理后的域名列表
+├── include_list.txt   # 包含域名列表
+└── exclude_list.txt   # 排除域名列表
 ```
 
-## 5. 故障排除
+## 5. 架构特点
 
-### 5.1 常见问题
+### 5.1 模块化设计
+
+项目采用模块化的 lib/ 架构，将功能分离到独立的库模块中：
+
+- **init.sh**：统一的初始化入口，减少代码重复
+- **processor.sh**：支持并行处理，自动检测最优线程数
+- **downloader.sh**：带重试逻辑的下载工具，支持指数退避
+- **error.sh**：统一的错误处理，包含文件名和行号信息
+
+### 5.2 跨平台兼容
+
+- 支持 macOS、Linux、BSD 系统
+- 自动检测平台并适配命令差异（如 base64、sed 参数）
+- 兼容 bash 3.2+（macOS 默认版本）
+
+### 5.3 健壮性保证
+
+- 完整的信号处理（EXIT、INT、TERM）
+- 参数验证和输入净化
+- 并行任务状态检查
+- 临时文件安全管理
+
+## 6. 故障排除
+
+### 6.1 常见问题
 
 **Q: 导入规则后 DNS 解析变慢？**
 
@@ -217,22 +256,22 @@ A: 在 RouterOS 中运行以下命令查看已加载的规则：
 /ip dns static print count-only
 ```
 
-## 6. 高级用法
+## 7. 高级用法
 
-### 6.1 自定义脚本
+### 7.1 自定义脚本
 
 您可以修改 `generate.sh` 脚本来自定义生成过程，例如添加更多的 IP 列表源或调整域名处理逻辑。
 
-### 6.2 与其他系统集成
+### 7.2 与其他系统集成
 
 除了 RouterOS，本项目生成的规则也可以用于其他系统：
 
 - **OpenWrt**: 使用 `03-gfwlist.conf` 与 dnsmasq 集成
 - **其他路由系统**: 可以参考脚本逻辑，将规则转换为适合您系统的格式
 
-## 7. 贡献与反馈
+## 8. 贡献与反馈
 
-欢迎通过 [Issues](https://github.com/ruijzhan/chnroute/issues) 或 [Pull Requests](https://github.com/ruijzhan/chnroute/pulls) 提交改进建议或反馈问题。
+欢迎通过 [Issues](https://github.com/xiangwhy/chnroute/issues) 或 [Pull Requests](https://github.com/xiangwhy/chnroute/pulls) 提交改进建议或反馈问题。
 
 ---
 

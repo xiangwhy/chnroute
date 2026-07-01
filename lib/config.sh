@@ -6,7 +6,7 @@
 # Script metadata
 readonly SCRIPT_VERSION="2.0.0"
 readonly SCRIPT_AUTHOR="ruijzhan"
-readonly SCRIPT_REPO="https://github.com/ruijzhan/chnroute"
+readonly SCRIPT_REPO="https://github.com/xiangwhy/chnroute"
 
 # Network defaults
 readonly DEFAULT_CONNECT_TIMEOUT=30

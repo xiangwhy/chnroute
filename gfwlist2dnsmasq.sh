@@ -14,22 +14,12 @@ export LC_ALL=POSIX
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LIB_DIR="${SCRIPT_DIR}/lib"
 
-# shellcheck source=lib/config.sh
-. "${LIB_DIR}/config.sh"
-# shellcheck source=lib/logger.sh
-. "${LIB_DIR}/logger.sh"
-# shellcheck source=lib/temp.sh
-. "${LIB_DIR}/temp.sh"
-# shellcheck source=lib/error.sh
-. "${LIB_DIR}/error.sh"
-# shellcheck source=lib/platform.sh
-. "${LIB_DIR}/platform.sh"
-# shellcheck source=lib/dependencies.sh
-. "${LIB_DIR}/dependencies.sh"
-# shellcheck source=lib/validation.sh
-. "${LIB_DIR}/validation.sh"
-# shellcheck source=lib/downloader.sh
-. "${LIB_DIR}/downloader.sh"
+# shellcheck source=lib/init.sh
+. "${LIB_DIR}/init.sh"
+if ! init_chnroute; then
+    echo "ERROR: Failed to initialize chnroute libraries" >&2
+    exit 1
+fi
 
 TMP_DIR=""
 OUT_TYPE='DNSMASQ_RULES'
@@ -94,6 +84,19 @@ validate_output_path() {
         log_error "Output directory does not exist: ${parent_dir}"
         exit 1
     fi
+}
+
+sanitize_awk_variable() {
+    local value=$1
+    local name=$2
+    # Remove any characters that could be interpreted by awk
+    # Allow only alphanumeric, dots, colons, slashes, hyphens, underscores, commas
+    local sanitized="${value//[^a-zA-Z0-9.\/:,_\-]/}"
+    if [[ "$sanitized" != "$value" ]]; then
+        log_error "Invalid characters in ${name}: '${value}'"
+        return 1
+    fi
+    echo "$sanitized"
 }
 
 get_args() {
@@ -183,6 +186,11 @@ get_args() {
             exit 1
         fi
 
+        # Sanitize DNS_IP to prevent awk injection
+        if ! DNS_IP=$(sanitize_awk_variable "$DNS_IP" "DNS_IP"); then
+            exit 1
+        fi
+
         if ! [[ $DNS_PORT =~ ^[0-9]+$ ]] || (( DNS_PORT < 1 || DNS_PORT > 65535 )); then
             log_error "Invalid DNS port: ${DNS_PORT}. Must be between 1 and 65535."
             exit 1
@@ -190,6 +198,10 @@ get_args() {
 
         if [[ -n "$IPSET_NAME" ]]; then
             if [[ $IPSET_NAME =~ ^[[:alnum:]_]+(,[[:alnum:]_]+)*$ ]]; then
+                # Sanitize IPSET_NAME to prevent awk injection
+                if ! IPSET_NAME=$(sanitize_awk_variable "$IPSET_NAME" "IPSET_NAME"); then
+                    exit 1
+                fi
                 WITH_IPSET=1
             else
                 log_error "Invalid ipset name: ${IPSET_NAME}"
@@ -310,12 +322,7 @@ EOL
 }
 
 main() {
-    initialize_logging
-    create_temp_root
-    trap cleanup_temp_root EXIT
-    setup_error_trap
-    setup_platform_specific
-    check_dependencies_detailed
+    init_base_environment
 
     if [[ $# -eq 0 ]]; then
         log_error "No arguments provided"
