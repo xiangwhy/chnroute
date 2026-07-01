@@ -1,6 +1,7 @@
 name: Make and Commit
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 21 * * *'  # Run daily at 21:00 UTC
   push:
