@@ -1,4 +1,4 @@
-# Generated at: 2026-08-02 05:58:45
+# Generated at: 2026-08-03 05:58:11
 /log info "Loading CN ipv4 address list"
 /ip firewall address-list
 :local ipList {
