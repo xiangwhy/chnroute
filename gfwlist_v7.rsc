@@ -65,6 +65,7 @@
     "6parker.com";
     "6parknews.com";
     "7capture.com";
+    "7x24hrs.com";
     "8-d.com";
     "85cc.us";
     "881903.com";
@@ -2408,7 +2409,9 @@
     "meripet.com";
     "merit-times.com.tw";
     "messenger.com";
+    "meta.ai";
     "meta.com";
+    "metaaivm.com";
     "metafilter.com";
     "metamask.io";
     "metart.com";
@@ -4381,4 +4384,4 @@
 }
 
 /ip dns cache flush
-/log info "GFW domain list updated with 4369 domains"
+/log info "GFW domain list updated with 4372 domains"
