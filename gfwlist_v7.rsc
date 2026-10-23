@@ -807,6 +807,7 @@
     "compileheart.com";
     "connect.facebook.net";
     "conoha.jp";
+    "console.typesafe.ai";
     "contests.twilio.com";
     "cool18.com";
     "coolaler.com";
@@ -1363,6 +1364,7 @@
     "g.co";
     "g0v.social";
     "g6hentai.com";
+    "ga.jspm.io";
     "gab.com";
     "gabocorp.com";
     "gagaoolala.com";
@@ -4384,4 +4386,4 @@
 }
 
 /ip dns cache flush
-/log info "GFW domain list updated with 4372 domains"
+/log info "GFW domain list updated with 4374 domains"
