@@ -53,6 +53,7 @@
     "51.ca";
     "51jav.org";
     "51luoben.com";
+    "51papaya.com";
     "5278.cc";
     "611study.com";
     "611study.icu";
@@ -4404,4 +4405,4 @@
 }
 
 /ip dns cache flush
-/log info "GFW domain list updated with 4392 domains"
+/log info "GFW domain list updated with 4393 domains"
