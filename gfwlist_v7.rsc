@@ -770,6 +770,8 @@
     "cmcn.org";
     "cmegroup.com";
     "cmi.org.tw";
+    "cmmedia.com.tw";
+    "cmoney.tw";
     "cms.gov";
     "cmule.com";
     "cmx.im";
@@ -784,6 +786,7 @@
     "cnd.org";
     "cnnews.chosun.com";
     "cnpolitics.org";
+    "cnyes.com";
     "co.ng.mil";
     "coat.co.jp";
     "cobinhood.com";
@@ -1028,6 +1031,7 @@
     "dtiblog.com";
     "dtic.mil";
     "dubox.com";
+    "duck.ai";
     "duck.com";
     "duckduckgo.com";
     "duckmylife.com";
@@ -1053,6 +1057,7 @@
     "e-gold.com";
     "e-hentai.org";
     "e-hentaidb.com";
+    "e-info.org.tw";
     "e-zone.com.hk";
     "e123.hk";
     "e621.net";
@@ -1378,9 +1383,9 @@
     "gabocorp.com";
     "gagaoolala.com";
     "galenwu.com";
-    "game735.com";
     "gamer.com.tw";
     "gamez.com.tw";
+    "gamma.app";
     "ganjing.com";
     "ganjingworld.com";
     "gaoming.net";
@@ -1751,6 +1756,7 @@
     "greatfire.us7.list-manage.com";
     "greatfirevpn.com";
     "greatfirewallofchina.org";
+    "greenbean.media";
     "greenpeace.org";
     "greenvpn.net";
     "grindr.com";
@@ -1850,13 +1856,16 @@
     "hkanews.wordpress.com";
     "hkbookcity.com";
     "hkchronicles.com";
+    "hkcitycreation.com";
     "hkcnews.com";
     "hkcoc.com";
     "hkcoc.weather.com.hk";
+    "hkcourtnews.com";
     "hkdc.us";
     "hkej.com";
     "hket.com";
     "hkfaa.com";
+    "hkfeature.com";
     "hkgalden.com";
     "hkgolden.com";
     "hkgpao.com";
@@ -2267,6 +2276,7 @@
     "library.usc.cuhk.edu.hk";
     "libredd.it";
     "lifemiles.com";
+    "lifesitenews.com";
     "lighten.org.tw";
     "lighti.me";
     "lightnovel.cn";
@@ -2275,6 +2285,7 @@
     "lihkg.com";
     "like.com";
     "lilaoshibushinilaoshi.com";
+    "limedia.tw";
     "line-apps.com";
     "line-scdn.net";
     "line.me";
@@ -2370,6 +2381,7 @@
     "marxists.org";
     "mas.to";
     "mash.to";
+    "master-insight.com";
     "mastodon.cloud";
     "mastodon.host";
     "mastodon.online";
@@ -2385,6 +2397,7 @@
     "matters.town";
     "matthewdgreen.wordpress.com";
     "mattwilcox.net";
+    "mc.yandex.ru";
     "mcadforums.com";
     "mcaf.ee";
     "mceindex.com";
@@ -2506,6 +2519,7 @@
     "mondex.org";
     "money-link.com.tw";
     "moneydj.com";
+    "moneynet.com.tw";
     "monica.im";
     "monitorchina.org";
     "monocloud.me";
@@ -2545,6 +2559,7 @@
     "muzi.net";
     "muzu.tv";
     "mvg.jp";
+    "my-formosa.com.tw";
     "my-private-network.co.uk";
     "my.pcloud.com";
     "myaudiocast.com";
@@ -2628,6 +2643,7 @@
     "newthuhole.com";
     "newyorker.com";
     "nexon.com";
+    "nextapple.com";
     "nextdigital.com.hk";
     "nexton-net.jp";
     "nexttv.com.tw";
@@ -2823,6 +2839,7 @@
     "parsevideo.com";
     "partnerstack.xyz";
     "passion.com";
+    "passiontimes.hk";
     "paste.ee";
     "pastie.org";
     "patreon.com";
@@ -3002,6 +3019,7 @@
     "pubu.com.tw";
     "puffinbrowser.com";
     "pullfolio.co";
+    "pulsehknews.com";
     "pure18.com";
     "pureconcepts.net";
     "pureinsight.org";
@@ -3229,6 +3247,7 @@
     "shadowsocks.com.hk";
     "shadowsocks.org";
     "shahit.biz";
+    "shanghainationalparty.com";
     "share-videos.se";
     "share.america.gov";
     "sharecool.org";
@@ -3268,6 +3287,7 @@
     "sing-box.sagernet.org";
     "singaporepools.com.sg";
     "singlelogin.se";
+    "singpao.com.hk";
     "singtao.com";
     "singtaousa.com";
     "sinoants.com";
@@ -3334,6 +3354,7 @@
     "sotwe.com";
     "soubory.com";
     "soulcaliburhentai.net";
+    "soulogic.com";
     "soundcloud.com";
     "soundofhope.org";
     "soundon.fm";
@@ -3475,6 +3496,7 @@
     "taiwanjustice.net";
     "taiwanncf.org.tw";
     "taiwannews.com.tw";
+    "taiwantoday.tw";
     "taiwantt.org.tw";
     "talkatone.com";
     "talkboxapp.com";
@@ -3539,6 +3561,7 @@
     "thecenter.mit.edu";
     "thechasernews.co.uk";
     "thechinacollection.org";
+    "thecollectivehk.com";
     "theconversation.com";
     "thedalailamamovie.com";
     "thediplomat.com";
@@ -3554,18 +3577,22 @@
     "theinitium.com";
     "theintercept.com";
     "thenewslens.com";
+    "theonlinecitizen.com";
     "thepiratebay.org";
     "theporndude.com";
     "theportalwiki.com";
     "theprint.in";
     "thesaturdaypaper.com.au";
+    "thestandard.com.hk";
     "thestandnews.com";
+    "thestar.com";
     "thetatoken.org";
     "thetibetpost.com";
     "thetvdb.com";
     "theweek.com";
     "thewgo.org";
     "thewirechina.com";
+    "thewitnesshk.com";
     "theync.com";
     "thinkchina.sg";
     "thinkgeek.com";
@@ -4137,6 +4164,7 @@
     "woeser.com";
     "wokar.org";
     "wolfax.com";
+    "womany.net";
     "wombo.ai";
     "woolyss.com";
     "woopie.jp";
@@ -4405,4 +4433,4 @@
 }
 
 /ip dns cache flush
-/log info "GFW domain list updated with 4393 domains"
+/log info "GFW domain list updated with 4421 domains"
