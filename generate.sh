@@ -279,7 +279,7 @@ parallel_downloads() {
     (
         local tmp_base64="${TMP_DIR}/cache/gfwlist.base64"
         if download_with_retry "$GFWLIST_URL" "$tmp_base64" 60; then
-            if $BASE64_DECODE "$tmp_base64" >"${SCRIPT_DIR}/${OUTPUT_GFWLIST_AUTOPROXY}"; then
+            if $BASE64_DECODE <"$tmp_base64" >"${SCRIPT_DIR}/${OUTPUT_GFWLIST_AUTOPROXY}"; then
                 log_success "Decoded GFW list to ${OUTPUT_GFWLIST_AUTOPROXY}"
                 echo "gfwlist_success" >"$status_pipe"
             else

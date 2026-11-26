@@ -244,7 +244,7 @@ process_gfwlist() {
     fi
 
     log_info "Decoding base64 content"
-    if ! $BASE64_DECODE "$base64_file" >"$gfwlist_file"; then
+    if ! $BASE64_DECODE <"$base64_file" >"$gfwlist_file"; then
         log_error "Failed to decode GFWList"
         exit 2
     fi
